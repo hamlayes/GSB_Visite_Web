@@ -2,6 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const stuffRoutes = require('./routes/stuff');
+const motifRoutes = require('./routes/motif');
+const praticienRoutes = require('./routes/praticien');
+const visiteRoutes = require('./routes/visite');
+const visiteurRoutes = require('./routes/visiteur');
 
 const app = express();
 
@@ -19,5 +23,9 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/stuff', stuffRoutes);
+app.use('/api/motif', motifRoutes);
+app.use('/api/praticien', praticienRoutes);
+app.use('/api/visite', visiteRoutes);
+app.use('/api/visiteur', visiteurRoutes);
 
 module.exports = app;
