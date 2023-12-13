@@ -2,10 +2,13 @@ const Praticien = require('../models/praticien');
 const expressAsyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 
-exports.createPraticien = [
-    body('email').isEmail().withMessage('Le format de l\'email est invalide'),
-    expressAsyncHandler(async (req, res) => {
+exports.createPraticien = expressAsyncHandler(async (req, res) => {
+        await body('email').isEmail().withMessage('Le format de l\'email est invalide').run(req);
+    
         const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }
 
         const praticien = new Praticien({
             nom: req.body.nom,
@@ -19,9 +22,8 @@ exports.createPraticien = [
         });
 
         await praticien.save();
-        res.status(201).json({ message: 'Praticien enregistré avec succès !' });
-    })
-];
+        res.status(201).json({ message: 'Praticien enregistré avec succès !', praticien_id: praticien._id });
+    });
 
 exports.getOnePraticien = expressAsyncHandler(async (req, res) => {
     const praticien = await Praticien.findOne({ _id: req.params.id });

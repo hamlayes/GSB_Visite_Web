@@ -1,27 +1,6 @@
 const Visiteur = require('../models/visiteur');
 const expressAsyncHandler = require('express-async-handler');
-
-
-exports.createPraticien = [
-  // Autres validations...
-  body('email').isEmail().withMessage('Le format de l\'email est invalide'),
-  // Autres middlewares...
-  expressAsyncHandler(async (req, res) => {
-    const errors = validationResult(req);
-
-    const praticien = new Praticien({
-      nom: req.body.nom,
-      prenom: req.body.prenom,
-      tel: req.body.tel,
-      email: req.body.email,
-      date_embauche: req.body.date_embauche,
-      visites: req.body.visites
-    });
-
-    await praticien.save();
-    res.status(201).json({ message: 'Praticien enregistré avec succès !' });
-  })
-];
+const { body , validationResult } = require('express-validator');
 
 exports.getOneVisiteur = expressAsyncHandler(async (req, res) => {
   const visiteur = await Visiteur.findOne({ _id: req.params.id });
@@ -56,7 +35,6 @@ exports.getAllVisiteurs = expressAsyncHandler(async (req, res) => {
   const visiteurs = await Visiteur.find();
   res.status(200).json(visiteurs);
 });
-const { body, validationResult } = require('express-validator');
 
 // ...
 
@@ -79,7 +57,6 @@ exports.createVisiteur = expressAsyncHandler(async (req, res) => {
   });
 
   await visiteur.save();
-  res.status(201).json({ message: 'Visiteur enregistré avec succès !' });
+  res.status(201).json({ message: 'Visiteur enregistré avec succès !', visiteur_id: visiteur._id });
 });
-
 // ...

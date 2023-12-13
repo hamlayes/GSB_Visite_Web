@@ -4,11 +4,14 @@ const expressAsyncHandler = require('express-async-handler');
 
 exports.createMotif = expressAsyncHandler(async (req, res) => {
   const motif = new Motif({
-    libelle: req.body.libelle
+    libelle: req.body.libelle,
   });
 
   await motif.save();
-  res.status(201).json({ message: 'Motif saved successfully!' });
+  res.status(201).json({ 
+    message: "Motif saved successfully!",
+    motif_id: motif._id 
+  });
 });
 
 exports.getOneMotif = expressAsyncHandler(async (req, res) => {
@@ -27,7 +30,7 @@ exports.modifyMotif = expressAsyncHandler(async (req, res) => {
   };
 
   await Motif.updateOne({_id: req.params.id}, motif);
-  res.status(201).json({ message: 'Motif updated successfully!' });
+  res.status(201).json({ message: 'Motif updated successfully!', motif_id: motif._id });
 });
 
 exports.deleteMotif = expressAsyncHandler(async (req, res) => {

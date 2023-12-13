@@ -11,7 +11,7 @@ exports.createVisite = expressAsyncHandler(async (req, res) => {
     });
 
     await visite.save();
-    res.status(201).json({ message: 'Visite saved successfully!' });
+    res.status(201).json({ message: 'Visite saved successfully!', visite_id: visite._id });
 });
 
 exports.getOneVisite = expressAsyncHandler(async (req, res) => {
