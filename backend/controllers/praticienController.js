@@ -3,7 +3,7 @@ const expressAsyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 
 exports.createPraticien = expressAsyncHandler(async (req, res) => {
-        await body('email').isEmail().withMessage('Le format de l\'email est invalide').run(req);
+        //await body('email').isEmail().withMessage('Le format de l\'email est invalide').run(req);
     
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
