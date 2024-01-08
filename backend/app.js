@@ -7,13 +7,9 @@ const visiteRoutes = require('./routes/visite');
 const visiteurRoutes = require('./routes/visiteur');
 const userRoutes = require('./routes/user');
 const auth = require('./middlewares/auth');
+const helmet = require('helmet');
 
-const rateLimit = require('express-rate-limit');
-const limiter = rateLimit({
-  windowMs: 1 * 60 * 10, // 1 minutes (changer la première valeur qui représente les minutes)
-  max: 5, // Limite le nombre de requêtes par IP à 5 pendant la période spécifiée
-  message: 'Trop de tentatives de connexion, veuillez réessayer plus tard. (15 min)',
-});
+
 
 const app = express();
 
@@ -30,7 +26,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/auth/login', limiter);
+app.use(helmet());
+app.set('trust proxy', 1);
 app.use('/api/motif', auth, motifRoutes);
 app.use('/api/praticien', auth, praticienRoutes);
 app.use('/api/visite', auth, visiteRoutes);

@@ -1,13 +1,18 @@
 const mongoose = require('mongoose');
+const encryption = require('mongoose-encryption');
 
-const visiteurSchema = mongoose.Schema({
-  nom: { type: String, required: false },
-  prenom: { type: String, required: false },
-  tel: { type: String, required: false },
-  email: { type: String, required: true },
-  date_embauche: { type: Date, required: false },
-  visites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Visite', requires: false }],
-  password: { type: String, required: true }
+require('dotenv').config();
+
+const VisiteurSchema = new mongoose.Schema({
+    nom: String,
+    prenom: String,
+    tel: String,
+    email: String,
+    password: String,
+    date_embauche: Date,
+    visite: String,
 });
 
-module.exports = mongoose.model('Visiteur', visiteurSchema);
+VisiteurSchema.plugin(encryption, { secret: process.env.ENCRYPTION_KEY, encryptedFields: ['nom', 'prenom', 'tel', 'date_embauche'] });
+
+module.exports = mongoose.model('Visiteur', VisiteurSchema);

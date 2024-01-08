@@ -4,13 +4,25 @@ const Visiteur = require('../models/visiteur');
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require('express-validator');
 
-
 require('dotenv').config();
+
+const generateCipherKey = () => {
+    return crypto.randomBytes(32); // Utilisez une taille de clé appropriée à votre besoin
+};
 // Signup visiteur
 exports.signup = [
     // Validate and sanitize fields.
 
     body('email').isEmail().withMessage('Veuillez entrer un email valide.').normalizeEmail(),
+
+    body('email').custom(async (value) => {
+        const utilisateurExistant = await Visiteur.findOne({ email: value });
+        if (utilisateurExistant) {
+            throw new Error('Cet email est déjà utilisé. Veuillez choisir un autre.');
+        }
+        return true;
+    }),
+
     body('password')
     .isLength({ min: 8 }).withMessage('Le mot de passe doit contenir au moins 8 caractères.')
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
@@ -26,14 +38,13 @@ exports.signup = [
             return res.status(400).json({ error: errors.array()[0].msg });
         }
 
-
         const hash = await bcrypt.hash(req.body.password, 10);
         const visiteur = new Visiteur({
             nom: req.body.nom,
             prenom: req.body.prenom,
             tel: req.body.tel,
             email: req.body.email,
-            password: hash,
+            password: hash, 
             date_embauche: req.body.date_embauche,
             visite: req.body.visite,
 
