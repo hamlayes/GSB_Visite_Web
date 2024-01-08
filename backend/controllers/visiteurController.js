@@ -40,7 +40,7 @@ exports.getAllVisiteurs = expressAsyncHandler(async (req, res) => {
 
 exports.createVisiteur = expressAsyncHandler(async (req, res) => {
   // Ajoutez la validation pour l'email
-  await ('email').isEmail().withMessage('L\'email doit être au format approprié').run(req);
+  //await ('email').isEmail().withMessage('L\'email doit être au format approprié').run(req);
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

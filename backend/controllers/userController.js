@@ -11,7 +11,11 @@ exports.signup = [
     // Validate and sanitize fields.
 
     body('email').isEmail().withMessage('Veuillez entrer un email valide.').normalizeEmail(),
-    body('password').isLength({ min: 5 }).withMessage('Le mot de passe doit contenir au moins 5 caractères.').trim(),
+    body('password')
+    .isLength({ min: 8 }).withMessage('Le mot de passe doit contenir au moins 8 caractères.')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+    .withMessage('Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial.')
+    .trim(),
 
     asyncHandler(async (req, res, next) => {
 
@@ -35,7 +39,7 @@ exports.signup = [
 
         });
         await visiteur.save();
-        res.status(201).json({ message: 'Utilisateur créé !' });
+        res.status(201).json({ message: 'Utilisateur créé !', visiteur_id: visiteur._id, lastEmail: visiteur.email });
     })
 ];
 
