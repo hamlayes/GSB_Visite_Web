@@ -2,6 +2,7 @@ const Thing = require('../models/thing');
 const expressAsyncHandler = require('express-async-handler');
 
 exports.createThing = expressAsyncHandler(async (req, res) => {
+  
   const thing = new Thing({
     title: req.body.title,
     description: req.body.description,
